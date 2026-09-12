@@ -1,4 +1,4 @@
-const CACHE='hom-league-v13-pc-team-metric';
+const CACHE='hom-league-v14-pc-team-sticky';
 const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 
 self.addEventListener('install',e=>{
