@@ -1,4 +1,4 @@
-const CACHE='hom-league-v11-header-align';
+const CACHE='hom-league-v12-selected-next';
 const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 
 self.addEventListener('install',e=>{
