@@ -1,8 +1,8 @@
-const CACHE='hom-league-v17-match-no-right-gap';
+const CACHE='hom-league-v18-individual-no-right-gap';
 const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 
-const MATCH_CSS=`
-<style id="match-stats-no-right-gap-v17">
+const EXTRA_CSS=`
+<style id="hom-league-layout-fixes-v18">
 #match .matchgrid>.card:last-child{width:max-content!important;max-width:100%!important;justify-self:start!important}
 .mwrap{overflow:auto!important;padding:5px 4px 16px!important;width:max-content!important;max-width:100%!important;margin-left:12px!important;margin-right:0!important}
 .mtable{display:inline-block!important;width:max-content!important;min-width:0!important;max-width:none!important}
@@ -10,6 +10,15 @@ const MATCH_CSS=`
 .mtable .hdr{position:sticky!important;top:0!important;z-index:8!important;background:#171b20!important;padding-top:4px!important;padding-bottom:7px!important;border-bottom:1px solid var(--line)!important}
 .mtable .hdr>div{background:#11151a!important;border:1px solid #252c34!important;border-radius:7px!important;padding:7px 6px!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 .mtable .data>div:nth-child(n+4){padding-right:5px!important}
+@media(min-width:651px){
+  #individual .tablewrap{padding-right:0!important;padding-left:12px!important;overflow-x:auto!important}
+  #individual .itable{display:inline-block!important;width:max-content!important;min-width:0!important;max-width:none!important}
+  #individual .itable .tr{width:max-content!important;grid-template-columns:52px 190px 250px 124px repeat(8,104px)!important;gap:6px!important;padding-left:6px!important;padding-right:4px!important}
+  #individual .itable .hdr>div{padding-left:7px!important;padding-right:7px!important;text-align:center!important}
+  #individual .itable .hdr>:nth-child(4),#individual .itable .hdr>:nth-child(n+5){text-align:center!important}
+  #individual .itable .data>.num{padding-left:5px!important;padding-right:5px!important;text-align:right!important}
+  #individual .itable .tr>:last-child{margin-right:0!important}
+}
 @media(max-width:650px){
   #match .matchgrid>.card:last-child{width:max-content!important;max-width:100%!important;justify-self:start!important}
   .mwrap{padding:4px 2px 14px!important;width:max-content!important;max-width:100%!important;margin-left:6px!important;margin-right:0!important}
@@ -23,8 +32,9 @@ const MATCH_CSS=`
 function patchHtml(text){
   let out=text;
   out=out.replace(/<style id="match-stats-[\s\S]*?<\/style>/g,'');
-  out=out.replace('</head>',MATCH_CSS+'</head>');
-  out=out.replace(/navigator\.serviceWorker\.register\('\.\/sw\.js\?v=\d+'\)/g,"navigator.serviceWorker.register('./sw.js?v=17')");
+  out=out.replace(/<style id="hom-league-layout-fixes-[\s\S]*?<\/style>/g,'');
+  out=out.replace('</head>',EXTRA_CSS+'</head>');
+  out=out.replace(/navigator\.serviceWorker\.register\('\.\/sw\.js\?v=\d+'\)/g,"navigator.serviceWorker.register('./sw.js?v=18')");
   return out;
 }
 
