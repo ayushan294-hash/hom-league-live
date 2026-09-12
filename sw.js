@@ -1,28 +1,30 @@
-const CACHE='hom-league-v16-match-compact';
+const CACHE='hom-league-v17-match-no-right-gap';
 const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 
 const MATCH_CSS=`
-<style id="match-stats-compact-v16">
-.mtable{width:max-content!important;min-width:0!important}
-.mtable .tr{grid-template-columns:48px 175px 245px 90px 72px 60px 60px 60px!important}
-.mtable .hdr{position:sticky;top:0;z-index:8;background:#171b20;padding-top:4px;padding-bottom:7px;border-bottom:1px solid var(--line)}
-.mtable .hdr>div{background:#11151a;border:1px solid #252c34;border-radius:7px;padding:7px 8px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mtable .data>div:nth-child(n+4){padding-right:8px}
+<style id="match-stats-no-right-gap-v17">
+#match .matchgrid>.card:last-child{width:max-content!important;max-width:100%!important;justify-self:start!important}
+.mwrap{overflow:auto!important;padding:5px 4px 16px!important;width:max-content!important;max-width:100%!important;margin-left:12px!important;margin-right:0!important}
+.mtable{display:inline-block!important;width:max-content!important;min-width:0!important;max-width:none!important}
+.mtable .tr{width:max-content!important;grid-template-columns:44px 160px 218px 82px 62px 52px 52px 52px!important;gap:5px!important;padding:8px 6px!important}
+.mtable .hdr{position:sticky!important;top:0!important;z-index:8!important;background:#171b20!important;padding-top:4px!important;padding-bottom:7px!important;border-bottom:1px solid var(--line)!important}
+.mtable .hdr>div{background:#11151a!important;border:1px solid #252c34!important;border-radius:7px!important;padding:7px 6px!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.mtable .data>div:nth-child(n+4){padding-right:5px!important}
 @media(max-width:650px){
-  .mwrap{padding:4px 6px 14px}
-  .mtable{width:max-content!important;min-width:0!important}
-  .mtable .tr{grid-template-columns:40px 150px 180px 78px 62px 54px 54px 54px!important;gap:4px;padding:7px 4px}
-  .mtable .hdr>div{padding:6px 5px;font-size:9px;text-align:center}
-  .mtable .data>div:nth-child(n+4){padding-right:5px}
+  #match .matchgrid>.card:last-child{width:max-content!important;max-width:100%!important;justify-self:start!important}
+  .mwrap{padding:4px 2px 14px!important;width:max-content!important;max-width:100%!important;margin-left:6px!important;margin-right:0!important}
+  .mtable{display:inline-block!important;width:max-content!important;min-width:0!important;max-width:none!important}
+  .mtable .tr{width:max-content!important;grid-template-columns:34px 132px 146px 66px 50px 42px 42px 42px!important;gap:3px!important;padding:6px 4px!important}
+  .mtable .hdr>div{padding:6px 3px!important;font-size:9px!important;text-align:center!important}
+  .mtable .data>div:nth-child(n+4){padding-right:3px!important}
 }
 </style>`;
 
 function patchHtml(text){
-  let out=text.replace('</head>',MATCH_CSS+'</head>');
-  out=out.replace("navigator.serviceWorker.register('./sw.js?v=14')","navigator.serviceWorker.register('./sw.js?v=16')
-         .then(r=>{if(r.waiting)r.waiting.postMessage({type:'SKIP_WAITING'})})");
-  out=out.replace("navigator.serviceWorker.register('./sw.js?v=15')","navigator.serviceWorker.register('./sw.js?v=16')
-         .then(r=>{if(r.waiting)r.waiting.postMessage({type:'SKIP_WAITING'})})");
+  let out=text;
+  out=out.replace(/<style id="match-stats-[\s\S]*?<\/style>/g,'');
+  out=out.replace('</head>',MATCH_CSS+'</head>');
+  out=out.replace(/navigator\.serviceWorker\.register\('\.\/sw\.js\?v=\d+'\)/g,"navigator.serviceWorker.register('./sw.js?v=17')");
   return out;
 }
 
