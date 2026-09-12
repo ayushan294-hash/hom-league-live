@@ -1,4 +1,4 @@
-const CACHE='hom-league-v8-pinned-metric';
+const CACHE='hom-league-v9-less-sticky';
 const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 
 self.addEventListener('install',e=>{
