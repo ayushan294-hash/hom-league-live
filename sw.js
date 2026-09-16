@@ -1,9 +1,10 @@
-const CACHE='hom-league-v23-mobile-individual';
-const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png','./individual-stats-v23.js'];
+const CACHE='hom-league-v24-layout-fix';
+const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png','./individual-stats-v24.js'];
 
 function patchHtml(text){
-  if(text.includes('individual-stats-v23.js'))return text;
-  return text.replace('</body>','<script src="./individual-stats-v23.js?v=23"></script></body>');
+  text=text.replace(/<script src="\.\/individual-stats-v2[1-3]\.js\?v=2[1-3]"><\/script>/g,'');
+  if(text.includes('individual-stats-v24.js'))return text;
+  return text.replace('</body>','<script src="./individual-stats-v24.js?v=24"></script></body>');
 }
 
 self.addEventListener('install',e=>{
