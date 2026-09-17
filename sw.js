@@ -1,4 +1,4 @@
-const CACHE='hom-league-v28-update-groups';
+const CACHE='hom-league-v29-sticky-columns';
 const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png','./individual-stats-v24.js'];
 
 function patchHtml(text){
