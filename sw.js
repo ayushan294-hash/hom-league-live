@@ -1,4 +1,4 @@
-const CACHE='hom-league-v24-layout-fix';
+const CACHE='hom-league-v26-match-layout';
 const APP=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png','./individual-stats-v24.js'];
 
 function patchHtml(text){
