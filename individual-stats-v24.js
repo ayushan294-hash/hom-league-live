@@ -37,9 +37,18 @@
       <section id="updates" class="page hide">
         <div class="card"><div class="head"><div><h2>UPDATE</h2><div class="sub">HOM.LEAGUE LIVE DATA DASHBOARD 更新履歴</div></div><span class="badge">CHANGE LOG</span></div>
           <div class="updatelist">
-            <div class="updateitem"><b>2026.09.17</b><span>個人成績に各着順・最高打点・立直和了率・ツモ率を追加。トップ3 / ワースト3表示、RECORDS・UPDATEページを追加。</span></div>
-            <div class="updateitem"><b>2026.09.17</b><span>試合スタッツ表の横スクロール、見出し位置、選手名・チーム名の1行表示を調整。</span></div>
-            <div class="updateitem"><b>2026.09.16</b><span>個人成績の表示順を整理し、スマホ版の固定列表示を改善。</span></div>
+            <div class="updategroup">
+              <div class="updatedate">2026.09.17</div>
+              <div class="updateentry"><span class="updatekind add">追加</span><span>個人成績に各着順・最高打点・立直和了率・ツモ率を追加。</span></div>
+              <div class="updateentry"><span class="updatekind add">追加</span><span>トップ3 / ワースト3表示と、RECORDS・UPDATEページを追加。</span></div>
+              <div class="updateentry"><span class="updatekind fix">修正</span><span>試合スタッツ表の横スクロール、列幅、見出し位置を調整。</span></div>
+              <div class="updateentry"><span class="updatekind fix">修正</span><span>持ち点推移グラフの軸間隔を広げ、局名と点数の文字が細長くつぶれる表示を修正。</span></div>
+              <div class="updateentry"><span class="updatekind fix">修正</span><span>更新後の表示が残らないよう、キャッシュ更新処理を改善。</span></div>
+            </div>
+            <div class="updategroup">
+              <div class="updatedate">2026.09.16</div>
+              <div class="updateentry"><span class="updatekind fix">修正</span><span>個人成績の表示順を整理し、スマホ版の固定列表示を改善。</span></div>
+            </div>
           </div>
         </div>
       </section>`);
@@ -173,7 +182,7 @@
     .recordgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;padding:8px 18px 20px}
     .recordcard{background:#11151a;border:1px solid #2b333d;border-radius:13px;padding:15px;min-height:126px;display:flex;flex-direction:column;gap:5px}
     .recordcard small{color:#929ba8;font-weight:800}.recordcard strong{font-size:18px}.recordcard span{font-size:25px;font-weight:950;font-variant-numeric:tabular-nums}.recordcard em{font-size:10px;color:#aeb7c3;font-style:normal}
-    .updatelist{padding:8px 18px 20px;display:grid;gap:10px}.updateitem{background:#11151a;border:1px solid #2b333d;border-radius:12px;padding:14px;display:grid;grid-template-columns:100px 1fr;gap:14px;line-height:1.55}.updateitem b{font-variant-numeric:tabular-nums}.updateitem span{color:#cbd1d9}
+    .updatelist{padding:8px 18px 20px;display:grid;gap:12px}.updategroup{background:#11151a;border:1px solid #2b333d;border-radius:12px;padding:14px;display:grid;gap:10px}.updatedate{font-weight:950;font-variant-numeric:tabular-nums;border-bottom:1px solid #2b333d;padding-bottom:9px}.updateentry{display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:start;line-height:1.55}.updateentry>span:last-child{color:#cbd1d9}.updatekind{border-radius:999px;padding:3px 8px;text-align:center;font-size:10px;font-weight:950}.updatekind.add{background:#174d37;color:#8ff0bf}.updatekind.fix{background:#56331c;color:#ffc48e}
 
     @media(max-width:650px){
       .itable{min-width:1530px;width:1530px}
@@ -196,7 +205,7 @@
       .mtable .tr>:nth-child(3){display:block!important}
       .mtable .band{white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
       .recordgrid{grid-template-columns:1fr 1fr;padding:7px 10px 15px;gap:8px}.recordcard{min-height:112px;padding:12px}.recordcard strong{font-size:14px}.recordcard span{font-size:20px}
-      .updatelist{padding:7px 10px 15px}.updateitem{grid-template-columns:1fr;gap:5px;padding:12px}
+      .updatelist{padding:7px 10px 15px}.updategroup{padding:12px}.updateentry{grid-template-columns:48px 1fr;gap:8px}
     }
   `;
   document.head.appendChild(style);
