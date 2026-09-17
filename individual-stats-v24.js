@@ -25,6 +25,33 @@
   metric.innerHTML=order.map(k=>`<option value="${k}">${defs[k][0]}</option>`).join('');
   metric.value=order.includes(currentMetric)?currentMetric:'points';
 
+  // RECORDS / UPDATE タブとページを追加
+  const tabs=document.querySelector('.tabs');
+  const main=document.querySelector('main');
+  if(tabs&&!document.querySelector('[data-p="records"]')){
+    tabs.insertAdjacentHTML('beforeend','<button class="tab" data-p="records">RECORDS</button><button class="tab" data-p="updates">UPDATE</button>');
+    main.insertAdjacentHTML('beforeend',`
+      <section id="records" class="page hide">
+        <div class="card"><div class="head"><div><h2>RECORDS</h2><div class="sub">シーズン個人記録・LIVE更新</div></div><span class="badge">LIVE RECORDS</span></div><div id="recordGrid" class="recordgrid"></div></div>
+      </section>
+      <section id="updates" class="page hide">
+        <div class="card"><div class="head"><div><h2>UPDATE</h2><div class="sub">HOM.LEAGUE LIVE DATA DASHBOARD 更新履歴</div></div><span class="badge">CHANGE LOG</span></div>
+          <div class="updatelist">
+            <div class="updateitem"><b>2026.09.17</b><span>個人成績に各着順・最高打点・立直和了率・ツモ率を追加。トップ3 / ワースト3表示、RECORDS・UPDATEページを追加。</span></div>
+            <div class="updateitem"><b>2026.09.17</b><span>試合スタッツ表の横スクロール、見出し位置、選手名・チーム名の1行表示を調整。</span></div>
+            <div class="updateitem"><b>2026.09.16</b><span>個人成績の表示順を整理し、スマホ版の固定列表示を改善。</span></div>
+          </div>
+        </div>
+      </section>`);
+    document.querySelectorAll('.tab[data-p="records"],.tab[data-p="updates"]').forEach(b=>b.onclick=()=>{
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      document.querySelectorAll('.page').forEach(x=>x.classList.add('hide'));
+      document.getElementById(b.dataset.p).classList.remove('hide');
+      if(b.dataset.p==='records')renderRecords();
+    });
+  }
+
   const baseBuild=build;
   build=function(M,H,S){
     const out=baseBuild(M,H,S);
@@ -69,6 +96,18 @@
     return out;
   };
 
+  function metricGroups(players,k){
+    const asc=defs[k][1];
+    const valid=players.filter(p=>Number.isFinite(metricVal(p,k))).sort((a,b)=>{
+      const av=metricVal(a,k),bv=metricVal(b,k);
+      return asc?av-bv:bv-av;
+    });
+    return {
+      best:new Set(valid.slice(0,3).map(p=>p.name)),
+      worst:new Set(valid.slice(-3).map(p=>p.name))
+    };
+  }
+
   renderInd=function(){
     const k=metric.value,asc=defs[k][1];
     const a=[...D.ind].sort((x,y)=>{
@@ -79,13 +118,37 @@
       if(d)return d;
       return (y.points||0)-(x.points||0);
     });
+    const groups=Object.fromEntries(order.map(x=>[x,metricGroups(D.ind,x)]));
     const h=x=>x===k?' focus pickedMetric':'';
+    const rankCls=(p,x)=>groups[x].best.has(p.name)?' stat-top3':groups[x].worst.has(p.name)?' stat-worst3':'';
     itable.innerHTML=`<div class="tr hdr"><div>順位</div><div>選手</div><div>チーム</div>${order.map(x=>`<div class="${h(x).trim()}">${defs[x][0]}</div>`).join('')}</div>`+
       a.map((p,i)=>{
         const c=colors[p.team]||'#777';
-        return `<div class="tr data"><div class="pos">${i+1}</div><div class="band playerband" style="background:linear-gradient(90deg,${mix(c)},${c},#050505)"><span>${esc(p.name)}</span><small class="mobileTeam">${esc(p.team)}</small></div>${band(p.team,p.team)}${order.map(x=>`<div class="num${h(x)}">${metricText(p,x)}</div>`).join('')}</div>`;
+        return `<div class="tr data"><div class="pos">${i+1}</div><div class="band playerband" style="background:linear-gradient(90deg,${mix(c)},${c},#050505)"><span>${esc(p.name)}</span><small class="mobileTeam">${esc(p.team)}</small></div>${band(p.team,p.team)}${order.map(x=>`<div class="num${h(x)}${rankCls(p,x)}">${metricText(p,x)}</div>`).join('')}</div>`;
       }).join('');
+    renderRecords();
   };
+
+  function bestPlayer(k,asc=false,filter=()=>true){
+    const arr=(D?.ind||[]).filter(filter).filter(p=>Number.isFinite(metricVal(p,k)));
+    if(!arr.length)return null;
+    return arr.sort((a,b)=>asc?metricVal(a,k)-metricVal(b,k):metricVal(b,k)-metricVal(a,k))[0];
+  }
+
+  function renderRecords(){
+    const el=document.getElementById('recordGrid');
+    if(!el||!D)return;
+    const recs=[
+      ['総ポイント',bestPlayer('points'),p=>metricText(p,'points')],
+      ['最高スコア',bestPlayer('highScore',false,p=>p.highScore!=null),p=>metricText(p,'highScore')],
+      ['最高平均打点',bestPlayer('avgScore',false,p=>p.avgScore>0),p=>metricText(p,'avgScore')],
+      ['最高打点',bestPlayer('maxWin',false,p=>p.maxWin>0),p=>metricText(p,'maxWin')],
+      ['最高トップ率',bestPlayer('topRate',false,p=>p.games>0),p=>metricText(p,'topRate')],
+      ['最高立直和了率',bestPlayer('riichiWinRate',false,p=>p.webRiichiCount>0),p=>metricText(p,'riichiWinRate')],
+      ['最低放銃率',bestPlayer('houjuRate',true,p=>p.hands>0),p=>metricText(p,'houjuRate')]
+    ];
+    el.innerHTML=recs.map(([label,p,fmt])=>p?`<div class="recordcard"><small>${label}</small><strong>${esc(p.name)}</strong><span>${fmt(p)}</span><em>${esc(p.team)}</em></div>`:`<div class="recordcard"><small>${label}</small><strong>—</strong><span>—</span></div>`).join('');
+  }
 
   const style=document.createElement('style');
   style.id='individual-stats-v24-style';
@@ -96,17 +159,26 @@
     .itable .data{background:#11151a}
     .itable .data>.num{background:#11151a}
     .itable .hdr>div{background:#171b20}
+    .itable .data>.num.stat-top3{background:linear-gradient(90deg,rgba(176,35,55,.92),rgba(110,20,34,.78))!important;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(255,145,155,.25)}
+    .itable .data>.num.stat-worst3{background:linear-gradient(90deg,rgba(38,128,170,.90),rgba(23,82,121,.78))!important;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(150,225,255,.24)}
 
-    .mwrap{overflow-x:hidden;padding-left:12px;padding-right:12px}
-    .mtable{min-width:0;width:100%}
-    .mtable .tr{width:100%;grid-template-columns:40px minmax(105px,1.4fr) minmax(100px,1.25fr) 78px 62px 52px 52px 52px;gap:4px}
+    /* 試合スタッツは横スクロール可能。見出しとデータは完全に同じ列幅。 */
+    .mwrap{overflow-x:auto;overflow-y:hidden;padding:5px 8px 16px;-webkit-overflow-scrolling:touch}
+    .mtable{min-width:820px;width:820px}
+    .mtable .tr{width:820px;grid-template-columns:44px 170px 220px 88px 70px 58px 58px 58px;gap:4px;padding-left:4px;padding-right:4px}
     .mtable .hdr>div,.mtable .data>div{min-width:0}
+    .mtable .band{white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
+    .mtable .hdr>div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    .recordgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;padding:8px 18px 20px}
+    .recordcard{background:#11151a;border:1px solid #2b333d;border-radius:13px;padding:15px;min-height:126px;display:flex;flex-direction:column;gap:5px}
+    .recordcard small{color:#929ba8;font-weight:800}.recordcard strong{font-size:18px}.recordcard span{font-size:25px;font-weight:950;font-variant-numeric:tabular-nums}.recordcard em{font-size:10px;color:#aeb7c3;font-style:normal}
+    .updatelist{padding:8px 18px 20px;display:grid;gap:10px}.updateitem{background:#11151a;border:1px solid #2b333d;border-radius:12px;padding:14px;display:grid;grid-template-columns:100px 1fr;gap:14px;line-height:1.55}.updateitem b{font-variant-numeric:tabular-nums}.updateitem span{color:#cbd1d9}
 
     @media(max-width:650px){
       .itable{min-width:1530px;width:1530px}
       .itable .tr{width:1530px;grid-template-columns:42px 168px repeat(16,82px);gap:0;padding-left:4px;padding-right:4px}
       .itable .tr>:nth-child(3){display:none}
-
       .itable .tr>:nth-child(1),.itable .tr>:nth-child(2){position:sticky;z-index:20;background:#11151a}
       .itable .hdr>:nth-child(1),.itable .hdr>:nth-child(2){background:#171b20;z-index:30}
       .itable .tr>:nth-child(1){left:0}
@@ -117,11 +189,14 @@
       .itable .data>:nth-child(2){border-radius:0}
       .playerband .mobileTeam{display:block}
 
-      .mwrap{overflow-x:hidden;padding-left:6px;padding-right:6px}
-      .mtable{min-width:0;width:100%}
-      .mtable .tr{width:100%;grid-template-columns:34px minmax(120px,1fr) 70px 58px 46px 46px 46px;gap:4px}
-      .mtable .tr>:nth-child(3){display:none}
-      .mtable .playerband .mobileTeam{display:block}
+      /* スマホでもチーム列を隠さず、全8列を横スクロール */
+      .mwrap{overflow-x:auto;padding-left:6px;padding-right:6px}
+      .mtable{min-width:760px;width:760px}
+      .mtable .tr{width:760px;grid-template-columns:40px 155px 205px 82px 66px 54px 54px 54px;gap:4px;padding-left:4px;padding-right:4px}
+      .mtable .tr>:nth-child(3){display:block!important}
+      .mtable .band{white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
+      .recordgrid{grid-template-columns:1fr 1fr;padding:7px 10px 15px;gap:8px}.recordcard{min-height:112px;padding:12px}.recordcard strong{font-size:14px}.recordcard span{font-size:20px}
+      .updatelist{padding:7px 10px 15px}.updateitem{grid-template-columns:1fr;gap:5px;padding:12px}
     }
   `;
   document.head.appendChild(style);
