@@ -44,6 +44,8 @@
               <div class="updateentry"><span class="updatekind fix">修正</span><span>試合スタッツ表の横スクロール、列幅、見出し位置を調整。</span></div>
               <div class="updateentry"><span class="updatekind fix">修正</span><span>持ち点推移グラフの軸間隔を広げ、局名と点数の文字が細長くつぶれる表示を修正。</span></div>
               <div class="updateentry"><span class="updatekind fix">修正</span><span>更新後の表示が残らないよう、キャッシュ更新処理を改善。</span></div>
+              <div class="updateentry"><span class="updatekind fix">修正</span><span>個人成績を横スクロールした際、数値が選手名・チーム名の下へ見える重なりを修正。</span></div>
+              <div class="updateentry"><span class="updatekind fix">修正</span><span>試合スタッツ表の右端に残っていた余白を調整。</span></div>
             </div>
             <div class="updategroup">
               <div class="updatedate">2026.09.16</div>
@@ -168,12 +170,14 @@
     .itable .data{background:#11151a}
     .itable .data>.num{background:#11151a}
     .itable .hdr>div{background:#171b20}
+    .itable .tr>:nth-child(3)::after{content:"";position:absolute;top:-10px;bottom:-10px;right:-10px;width:10px;background:#11151a;pointer-events:none}
+    .itable .hdr>:nth-child(3)::after{background:#171b20}
     .itable .data>.num.stat-top3{background:linear-gradient(90deg,rgba(176,35,55,.92),rgba(110,20,34,.78))!important;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(255,145,155,.25)}
     .itable .data>.num.stat-worst3{background:linear-gradient(90deg,rgba(38,128,170,.90),rgba(23,82,121,.78))!important;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(150,225,255,.24)}
 
     /* 試合スタッツは横スクロール可能。見出しとデータは完全に同じ列幅。 */
     .mwrap{overflow-x:auto;overflow-y:hidden;padding:5px 8px 16px;-webkit-overflow-scrolling:touch}
-    .mtable{min-width:820px;width:820px}
+    .mtable{min-width:802px;width:802px}
     .mtable .tr{width:820px;grid-template-columns:44px 170px 220px 88px 70px 58px 58px 58px;gap:4px;padding-left:4px;padding-right:4px}
     .mtable .hdr>div,.mtable .data>div{min-width:0}
     .mtable .band{white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;line-height:1.15}
@@ -200,7 +204,7 @@
 
       /* スマホでもチーム列を隠さず、全8列を横スクロール */
       .mwrap{overflow-x:auto;padding-left:6px;padding-right:6px}
-      .mtable{min-width:760px;width:760px}
+      .mtable{min-width:746px;width:746px}
       .mtable .tr{width:760px;grid-template-columns:40px 155px 205px 82px 66px 54px 54px 54px;gap:4px;padding-left:4px;padding-right:4px}
       .mtable .tr>:nth-child(3){display:block!important}
       .mtable .band{white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
