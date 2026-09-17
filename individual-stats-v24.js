@@ -46,6 +46,7 @@
               <div class="updateentry"><span class="updatekind fix">修正</span><span>更新後の表示が残らないよう、キャッシュ更新処理を改善。</span></div>
               <div class="updateentry"><span class="updatekind fix">修正</span><span>個人成績を横スクロールした際、数値が選手名・チーム名の下へ見える重なりを修正。</span></div>
               <div class="updateentry"><span class="updatekind fix">修正</span><span>試合スタッツ表の右端に残っていた余白を調整。</span></div>
+              <div class="updateentry"><span class="updatekind fix">修正</span><span>個人成績の固定列に不透明な背景層を追加し、横スクロール時の沈み込み表示を再調整。</span></div>
             </div>
             <div class="updategroup">
               <div class="updatedate">2026.09.16</div>
@@ -170,7 +171,9 @@
     .itable .data{background:#11151a}
     .itable .data>.num{background:#11151a}
     .itable .hdr>div{background:#171b20}
-    .itable .tr>:nth-child(3)::after{content:"";position:absolute;top:-10px;bottom:-10px;right:-10px;width:10px;background:#11151a;pointer-events:none}
+    .itable .data>:nth-child(3){box-shadow:-520px 0 0 #11151a}
+    .itable .hdr>:nth-child(3){box-shadow:-520px 0 0 #171b20}
+    .itable .tr>:nth-child(3)::after{content:"";position:absolute;top:-10px;bottom:-10px;right:-12px;width:12px;background:#11151a;pointer-events:none}
     .itable .hdr>:nth-child(3)::after{background:#171b20}
     .itable .data>.num.stat-top3{background:linear-gradient(90deg,rgba(176,35,55,.92),rgba(110,20,34,.78))!important;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(255,145,155,.25)}
     .itable .data>.num.stat-worst3{background:linear-gradient(90deg,rgba(38,128,170,.90),rgba(23,82,121,.78))!important;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(150,225,255,.24)}
@@ -196,7 +199,9 @@
       .itable .hdr>:nth-child(1),.itable .hdr>:nth-child(2){background:#171b20;z-index:30}
       .itable .tr>:nth-child(1){left:0}
       .itable .tr>:nth-child(2){left:42px}
-      .itable .tr>:nth-child(2)::after{content:"";position:absolute;top:-2px;bottom:-2px;right:-2px;width:3px;background:#11151a;pointer-events:none}
+      .itable .data>:nth-child(2){box-shadow:-220px 0 0 #11151a}
+      .itable .hdr>:nth-child(2){box-shadow:-220px 0 0 #171b20}
+      .itable .tr>:nth-child(2)::after{content:"";position:absolute;top:-8px;bottom:-8px;right:-8px;width:8px;background:#11151a;pointer-events:none}
       .itable .hdr>:nth-child(2)::after{background:#171b20}
       .itable .data>:nth-child(1){border-radius:8px 0 0 8px}
       .itable .data>:nth-child(2){border-radius:0}
