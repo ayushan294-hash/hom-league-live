@@ -47,6 +47,7 @@
               <div class="updateentry"><span class="updatekind fix">修正</span><span>個人成績を横スクロールした際、数値が選手名・チーム名の下へ見える重なりを修正。</span></div>
               <div class="updateentry"><span class="updatekind fix">修正</span><span>試合スタッツ表の右端に残っていた余白を調整。</span></div>
               <div class="updateentry"><span class="updatekind fix">修正</span><span>個人成績の固定列に不透明な背景層を追加し、横スクロール時の沈み込み表示を再調整。</span></div>
+              <div class="updateentry"><span class="updatekind fix">修正</span><span>アプリ版のホーム画面アイコンをHOM.LEAGUE 3rd seasonロゴへ変更。</span></div>
             </div>
             <div class="updategroup">
               <div class="updatedate">2026.09.16</div>
